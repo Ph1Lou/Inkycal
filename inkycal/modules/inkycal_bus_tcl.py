@@ -96,7 +96,7 @@ class BusTCL(inkycal_module):
 
         logger.debug(f'line positions: {line_positions}')
 
-        horaires = "C13 : " + get_prochaines_horaires("C13-F", "10130")
+        horaires = "C13 : " + ', '.join(get_prochaines_horaires("C13-F", "10130"))
         logger.debug(f"horaires: {horaires}")
 
         # wrap text in case horaires is too large
