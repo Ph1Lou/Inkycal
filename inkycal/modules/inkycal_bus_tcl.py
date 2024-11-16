@@ -45,6 +45,16 @@ class BusTCL(inkycal_module):
 
     name = "TCl API"
 
+    requires = {
+
+        "stops": {
+            "label": "la liste des arrets"
+        },
+        "lines": {
+            "label": "Le numéro des lignes souhaitees associees aux arrets"
+        }
+    }
+
     def __init__(self, config):
 
         super().__init__(config)
@@ -55,7 +65,7 @@ class BusTCL(inkycal_module):
         self.lines = config['lines']
 
         if len(self.stops) != len(self.lines):
-            raise Exception("les tailles des listes des lignes et des arrets sont differentes")
+            raise Exception("le nombre de lignes et d'arrets sont differents")
 
         # give an OK message
         logger.debug(f'{__name__} loaded')
