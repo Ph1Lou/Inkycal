@@ -97,6 +97,10 @@ class BusTCL(inkycal_module):
         logger.debug(f'line positions: {line_positions}')
 
         horaires = "C13 : " + ', '.join(get_prochaines_horaires("C13-F", "10130"))
+        horaires += "\nT3 : " + ', '.join(get_prochaines_horaires("T3-F", "35660"))
+        horaires += "\nC16 : " + ', '.join(get_prochaines_horaires("C16-B", "10130"))
+        horaires += "\nL25 : " + ', '.join(get_prochaines_horaires("25-B", "10130"))
+
         logger.debug(f"horaires: {horaires}")
 
         # wrap text in case horaires is too large
@@ -118,9 +122,3 @@ class BusTCL(inkycal_module):
 
         # Return images for black and colour channels
         return im_black, im_colour
-
-
-#print(get_prochaines_horaires("T3-F", "35660"))
-#print(get_prochaines_horaires("C13-F", "10130"))
-#print(get_prochaines_horaires("C16-B", "10130"))
-#print(get_prochaines_horaires("25-B", "10130"))
