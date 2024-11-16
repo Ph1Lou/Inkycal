@@ -51,8 +51,8 @@ class BusTCL(inkycal_module):
 
         config = config['config']
 
-        self.stops = config['stops']
-        self.lines = config['lines']
+       # self.stops = config['stops']
+       # self.lines = config['lines']
 
         # give an OK message
         logger.debug(f'{__name__} loaded')
