@@ -104,10 +104,10 @@ class BusTCL(inkycal_module):
         ]
 
         lines = [
-            'C13',
-            'T3',
-            'C16',
-            'L25'
+            'C13 : ',
+            'T3 : ',
+            'C16 : ',
+            'L25 : '
         ]
 
         logger.debug(f"horaires: {horaires}")
