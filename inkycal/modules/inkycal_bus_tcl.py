@@ -13,7 +13,7 @@ def extract_time(item):
     raw_datetime = item.get("date_time")
     if raw_datetime:
         dt = datetime.strptime(raw_datetime, "%Y%m%dT%H%M%S")
-        return dt.strftime("%H:%M")
+        return dt.strftime("%Hh%M")
     return None
 
 def get_prochaines_horaires(ligne, arret):
