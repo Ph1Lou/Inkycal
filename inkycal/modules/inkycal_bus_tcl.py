@@ -51,8 +51,11 @@ class BusTCL(inkycal_module):
 
         config = config['config']
 
-       # self.stops = config['stops']
-       # self.lines = config['lines']
+        self.stops = config['stops']
+        self.lines = config['lines']
+
+        if len(self.stops) != len(self.lines):
+            raise Exception("les tailles des listes des lignes et des arrets sont differentes")
 
         # give an OK message
         logger.debug(f'{__name__} loaded')
@@ -97,17 +100,13 @@ class BusTCL(inkycal_module):
         logger.debug(f'line positions: {line_positions}')
 
         horaires = [
-            ', '.join(get_prochaines_horaires("C13-F", "10130")),
-            ', '.join(get_prochaines_horaires("T3-F", "35660")),
-            ', '.join(get_prochaines_horaires("C16-B", "10130")),
-            ', '.join(get_prochaines_horaires("25-B", "10130"))
+            ', '.join(get_prochaines_horaires(self.lines[_], self.stops[_]))
+            for _ in range(len(self.lines))
         ]
 
         lines = [
-            'C13 : ',
-            'T3 : ',
-            'C16 : ',
-            'L25 : '
+            self.lines[_].split('-')[0] + ' : '
+            for _ in range(len(self.lines))
         ]
 
         logger.debug(f"horaires: {horaires}")
