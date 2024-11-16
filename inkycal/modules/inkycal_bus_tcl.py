@@ -61,6 +61,10 @@ class BusTCL(inkycal_module):
 
         config = config['config']
 
+        for param in self.requires:
+            if param not in config:
+                raise Exception('config is missing {}'.format(param))
+
         self.stops = config['stops']
         self.lines = config['lines']
 
