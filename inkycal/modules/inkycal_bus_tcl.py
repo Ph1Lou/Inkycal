@@ -125,7 +125,7 @@ class BusTCL(inkycal_module):
                 font=self.font,
                 alignment='left',
             )
-            write(im_black, (line_width * len(lines[_]), line_positions[_][1]), (line_width, line_height),
+            write(im_black, (len(lines[_]), line_positions[_][1]), (line_width, line_height),
                   horaires[_], font=self.font, alignment='left')
 
         # Return images for black and colour channels
