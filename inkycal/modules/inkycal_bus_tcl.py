@@ -97,9 +97,9 @@ class BusTCL(inkycal_module):
         logger.debug(f'line positions: {line_positions}')
 
         horaires = "C13 : " + ', '.join(get_prochaines_horaires("C13-F", "10130"))
-        horaires += "\nT3 : " + ', '.join(get_prochaines_horaires("T3-F", "35660"))
-        horaires += "\nC16 : " + ', '.join(get_prochaines_horaires("C16-B", "10130"))
-        horaires += "\nL25 : " + ', '.join(get_prochaines_horaires("25-B", "10130"))
+        horaires += "-T3 : " + ', '.join(get_prochaines_horaires("T3-F", "35660"))
+        horaires += "-C16 : " + ', '.join(get_prochaines_horaires("C16-B", "10130"))
+        horaires += "-L25 : " + ', '.join(get_prochaines_horaires("25-B", "10130"))
 
         logger.debug(f"horaires: {horaires}")
 
