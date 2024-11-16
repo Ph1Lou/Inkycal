@@ -96,29 +96,37 @@ class BusTCL(inkycal_module):
 
         logger.debug(f'line positions: {line_positions}')
 
-        horaires = "C13 : " + ', '.join(get_prochaines_horaires("C13-F", "10130"))
-        horaires += " T3 : " + ', '.join(get_prochaines_horaires("T3-F", "35660"))
-        horaires += " C16 : " + ', '.join(get_prochaines_horaires("C16-B", "10130"))
-        horaires += " L25 : " + ', '.join(get_prochaines_horaires("25-B", "10130"))
+        horaires = [
+            ', '.join(get_prochaines_horaires("C13-F", "10130")),
+            ', '.join(get_prochaines_horaires("T3-F", "35660")),
+            ', '.join(get_prochaines_horaires("C16-B", "10130")),
+            ', '.join(get_prochaines_horaires("25-B", "10130"))
+        ]
+
+        lines = [
+            'C13',
+            'T3',
+            'C16',
+            'L25'
+        ]
 
         logger.debug(f"horaires: {horaires}")
 
-        # wrap text in case horaires is too large
-        wrapped = text_wrap(horaires, font=self.font, max_width=line_width)
-        logger.debug(f"wrapped: {wrapped}")
-
-        # Check if horaires can actually fit on the provided space
-        if len(wrapped) > max_lines:
-            logger.error("Ohoh, Horaires is too large for given space, please consider "
-                         "increasing the size for this module")
-
         # Write the horaires on the image
-        for _ in range(len(wrapped)):
+        for _ in range(len(horaires)):
             if _ + 1 > max_lines:
                 logger.error('Ran out of lines for this horaires :/')
                 break
+            write(
+                im_colour,
+                line_positions[_],
+                (line_width, line_height),
+                lines[_],
+                font=self.font,
+                alignment='left',
+            )
             write(im_black, line_positions[_], (line_width, line_height),
-                  wrapped[_], font=self.font, alignment='left')
+                  horaires[_], font=self.font, alignment='left')
 
         # Return images for black and colour channels
         return im_black, im_colour
