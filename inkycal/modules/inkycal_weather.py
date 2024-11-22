@@ -20,11 +20,12 @@ from inkycal.custom.functions import write
 from inkycal.custom.inkycal_exceptions import NetworkNotReachableError
 from inkycal.custom.openweathermap_wrapper import OpenWeatherMap
 from inkycal.modules.template import inkycal_module
-
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
+import adafruit_dht
+import board
 
-
+dhtDevice = adafruit_dht.DHT22(board.D27, use_pulseio=False)
 class Weather(inkycal_module):
     """Weather class
     parses weather details from openweathermap
@@ -449,7 +450,7 @@ class Weather(inkycal_module):
 
         # Get some current weather details
 
-        temperature = f"{current_weather['temp']:.{dec_temp}f}{self.tempDispUnit}"
+        temperature = f"{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
 
         weather_icon = current_weather["weather_icon_name"]
         humidity = str(current_weather["humidity"])
