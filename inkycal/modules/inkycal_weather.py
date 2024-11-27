@@ -452,6 +452,8 @@ class Weather(inkycal_module):
 
         temperature = f"{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
 
+        logger.info(temperature)
+
         weather_icon = current_weather["weather_icon_name"]
         humidity = str(current_weather["humidity"])
 
