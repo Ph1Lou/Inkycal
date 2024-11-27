@@ -457,7 +457,7 @@ class Weather(inkycal_module):
 
         weather_icon = current_weather["weather_icon_name"]
         humidity = str(current_weather["humidity"])
-        humidity += f"/{dhtDevice.humidity}%"
+        humidity += f"/{dhtDevice.humidity}"
 
         sunrise_raw = arrow.get(current_weather["sunrise"]).to(self.timezone)
         sunset_raw = arrow.get(current_weather["sunset"]).to(self.timezone)
