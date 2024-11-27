@@ -25,7 +25,7 @@ logger.setLevel(level=logging.INFO)
 import adafruit_dht
 import board
 
-dhtDevice = adafruit_dht.DHT22(board.D27, use_pulseio=True)
+dhtDevice = adafruit_dht.DHT22(board.D27, use_pulseio=False)
 class Weather(inkycal_module):
     """Weather class
     parses weather details from openweathermap
