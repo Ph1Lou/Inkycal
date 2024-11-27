@@ -449,8 +449,9 @@ class Weather(inkycal_module):
             logger.debug((key, val))
 
         # Get some current weather details
+        temperature = f"{current_weather['temp']:.{dec_temp}f}{self.tempDispUnit}"
 
-        temperature = f"{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
+        temperature += f"{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
 
         logger.info(temperature)
 
