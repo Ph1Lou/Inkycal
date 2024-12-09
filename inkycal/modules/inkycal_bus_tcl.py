@@ -128,26 +128,22 @@ class BusTCL(inkycal_module):
         middle_width = self.width / 2
 
         # Write the horaires on the image
-
-        _ = 0
-        while _ < len(horaires):
-            if _ + 1 > max_lines:
+        for _ in range(len(horaires)):
+            if _ + 1 > max_lines or _ * 2 >= len(horaires):
                 logger.error('Ran out of lines for this horaires :/')
                 break
             write(
                 im_colour,
                 line_positions[_],
                 (line_width, line_height),
-                lines[_],
+                lines[_ * 2],
                 font=self.font,
                 alignment='left',
             )
             write(im_black, (int(self.font.getlength(lines[_])), line_positions[_][1]), (line_width, line_height),
-                  horaires[_], font=self.font, alignment='left')
+                  horaires[_ * 2], font=self.font, alignment='left')
 
-            _+=1
-
-            if _ + 1 > max_lines or _ >= len(horaires):
+            if _ *2 + 1 >= len(horaires):
                 logger.error('Ran out of lines for this horaires :/')
                 break
 
@@ -155,12 +151,12 @@ class BusTCL(inkycal_module):
                 im_colour,
                 (int(line_positions[_][0] + middle_width), line_positions[_][1]),
                 (line_width, line_height),
-                lines[_],
+                lines[_ * 2 + 1],
                 font=self.font,
                 alignment='left',
             )
             write(im_black, (int(self.font.getlength(lines[_])  + middle_width), line_positions[_][1]), (line_width, line_height),
-                  horaires[_], font=self.font, alignment='left')
+                  horaires[_ * 2 + 1], font=self.font, alignment='left')
 
             _+=1
 
