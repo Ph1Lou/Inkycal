@@ -140,7 +140,7 @@ class BusTCL(inkycal_module):
                 font=self.font,
                 alignment='left',
             )
-            write(im_black, (int(self.font.getlength(lines[_])), line_positions[_][1]), (line_width, line_height),
+            write(im_black, (int(self.font.getlength(lines[_ * 2])), line_positions[_][1]), (line_width, line_height),
                   horaires[_ * 2], font=self.font, alignment='left')
 
             if _ *2 + 1 >= len(horaires):
@@ -155,7 +155,7 @@ class BusTCL(inkycal_module):
                 font=self.font,
                 alignment='left',
             )
-            write(im_black, (int(self.font.getlength(lines[_])  + middle_width), line_positions[_][1]), (line_width, line_height),
+            write(im_black, (int(self.font.getlength(lines[_ * 2 + 1])  + middle_width), line_positions[_][1]), (line_width, line_height),
                   horaires[_ * 2 + 1], font=self.font, alignment='left')
 
             _+=1
