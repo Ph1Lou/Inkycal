@@ -36,7 +36,7 @@ def get_prochaines_horaires(ligne, arret):
             return list(filter(None, map(extract_time, response.json())))
         else:
             print(f"Erreur {response.status_code}: {response.text}")
-            return [f"Erreur Ligne {ligne}/ Arrêt {arret}"]
+            return [f"Erreur {ligne}/ {arret}"]
 
     except requests.RequestException as e:
         print(f"Une erreur est survenue : {e}")
