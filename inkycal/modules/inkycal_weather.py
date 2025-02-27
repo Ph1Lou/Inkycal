@@ -452,7 +452,10 @@ class Weather(inkycal_module):
         temperature = f"{current_weather['temp']:.{dec_temp}f}{self.tempDispUnit}"
         logger.info(temperature)
 
-        temperature += f"/{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
+        try:
+            temperature += f"/{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
+        except RuntimeError as r:
+            logger.warning("Erreur lors de la récupération de la température", r)
 
         logger.info(temperature)
 
