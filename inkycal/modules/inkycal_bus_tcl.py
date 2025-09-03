@@ -2,45 +2,58 @@
 from inkycal.modules.template import inkycal_module
 from inkycal.custom import *
 import requests
-from datetime import datetime
+from dateutil import parser
+from zoneinfo import ZoneInfo
 # Show less logging for request module
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
 
+
+def get_line_with_destination(item):
+    return get_line(item) + " => " + " ".join(item.get("destination").split(" ")[0 : 2]) + " : "
+
+def get_line(item):
+    return item.get("line").split(':')[2]
+
+def extract(lines):
+    def inner(item):
+        if get_line(item) in lines:
+            schedules = item.get("schedules")
+            return [get_line_with_destination(item), ', '.join(list(filter(None, map(extract_time, schedules))))]
+        return None
+    return inner
+
 def extract_time(item):
-    raw_datetime = item.get("date_time")
-    if raw_datetime:
-        dt = datetime.strptime(raw_datetime, "%Y%m%dT%H%M%S")
-        return dt.strftime("%Hh%M")
-    return None
+    dateTime = (parser.isoparse(item.get("dateTime"))
+                .astimezone(ZoneInfo("Europe/Paris"))
+                .strftime("%Hh%M"))
+    realTime = item.get("realtime")
 
-def get_prochaines_horaires(ligne, arret):
+    if realTime:
+        return "⏳ " + dateTime
+    return dateTime
 
-    url = "https://carte.tcl.fr/api/schedules"
-    params = {
-        "stop": "stop_point:tcl:SP:" + arret,
-        "route": "route:tcl:" + ligne
-    }
-    headers = {
-        "Referer": "https://carte.tcl.fr/"
-    }
+
+def get_prochaines_horaires(arrets, lines):
+    return [get_prochaines_horaires_arret(arrets[_], lines) for _ in range(len(arrets))]
+
+def get_prochaines_horaires_arret(arret, lines):
+
+    url = f"https://carte-interactive.tcl.fr/api/interface/tcl/next-trips/areas/stop_area%3ASYTNEX%3{arret}"
 
     try:
-        response = requests.get(url,
-                                params=params,
-                                headers=headers)
+        response = requests.get(url)
 
         if response.status_code == 200:
-            return list(filter(None, map(extract_time, response.json())))
+            return list(filter(None, map(extract(lines), response.json().get("data"))))
         else:
             print(f"Erreur {response.status_code}: {response.text}")
-            return [f"Erreur {ligne}/ {arret}"]
+            return [f"Erreur {arret}"]
 
     except requests.RequestException as e:
         print(f"Une erreur est survenue : {e}")
-
 
 class BusTCL(inkycal_module):
 
@@ -49,10 +62,7 @@ class BusTCL(inkycal_module):
     requires = {
 
         "stops": {
-            "label": "la liste des arrets"
-        },
-        "lines": {
-            "label": "Le numéro des lignes souhaitees associees aux arrets"
+            "label": "Le numéro des arrêts "
         }
     }
 
@@ -114,37 +124,29 @@ class BusTCL(inkycal_module):
 
         logger.debug(f'line positions: {line_positions}')
 
-        horaires = [
-            ', '.join(get_prochaines_horaires(self.lines[_], self.stops[_]))
-            for _ in range(len(self.lines))
-        ]
+        lines = get_prochaines_horaires(self.stops, self.lines)
 
-        lines = [
-            self.lines[_].split('-')[0] + ' : '
-            for _ in range(len(self.lines))
-        ]
-
-        logger.debug(f"horaires: {horaires}")
+        logger.debug(f"horaires: {lines}")
 
         middle_width = self.width / 2
 
         # Write the horaires on the image
-        for _ in range(len(horaires)):
-            if _ + 1 > max_lines or _ * 2 >= len(horaires):
+        for _ in range(len(lines)):
+            if _ + 1 > max_lines or _ * 2 >= len(lines):
                 logger.error('Ran out of lines for this horaires :/')
                 break
             write(
                 im_colour,
                 line_positions[_],
                 (line_width, line_height),
-                lines[_ * 2],
+                lines[_ * 2][0],
                 font=self.font,
                 alignment='left',
             )
             write(im_black, (int(self.font.getlength(lines[_ * 2])), line_positions[_][1]), (line_width, line_height),
-                  horaires[_ * 2], font=self.font, alignment='left')
+                  lines[_ * 2][1], font=self.font, alignment='left')
 
-            if _ *2 + 1 >= len(horaires):
+            if _ *2 + 1 >= len(lines):
                 logger.error('Ran out of lines for this horaires :/')
                 break
 
@@ -152,12 +154,12 @@ class BusTCL(inkycal_module):
                 im_colour,
                 (int(line_positions[_][0] + middle_width), line_positions[_][1]),
                 (line_width, line_height),
-                lines[_ * 2 + 1],
+                lines[_ * 2 + 1][0],
                 font=self.font,
                 alignment='left',
             )
             write(im_black, (int(self.font.getlength(lines[_ * 2 + 1])  + middle_width), line_positions[_][1]), (line_width, line_height),
-                  horaires[_ * 2 + 1], font=self.font, alignment='left')
+                  lines[_ * 2 + 1][1], font=self.font, alignment='left')
 
             _+=1
 
