@@ -79,6 +79,8 @@ class BusTCL(inkycal_module):
         self.stops = config['stops']
         self.lines = config['lines']
 
+        logger.log(self.stops, self.lines)
+
         if len(self.stops) != len(self.lines):
             raise Exception("le nombre de lignes et d'arrets sont differents")
 
