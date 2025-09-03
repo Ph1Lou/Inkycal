@@ -22,10 +22,7 @@ from inkycal.custom.openweathermap_wrapper import OpenWeatherMap
 from inkycal.modules.template import inkycal_module
 logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.INFO)
-import adafruit_dht
-import board
 
-dhtDevice = adafruit_dht.DHT22(board.D27, use_pulseio=True)
 class Weather(inkycal_module):
     """Weather class
     parses weather details from openweathermap
@@ -450,18 +447,9 @@ class Weather(inkycal_module):
 
         # Get some current weather details
         temperature = f"{current_weather['temp']:.{dec_temp}f}{self.tempDispUnit}"
-        logger.info(temperature)
-
-        try:
-            temperature += f"/{dhtDevice.temperature:.{dec_temp}f}{self.tempDispUnit}"
-        except Exception as r:
-            logger.warning("Erreur lors de la récupération de la température", r)
-
-        logger.info(temperature)
 
         weather_icon = current_weather["weather_icon_name"]
         humidity = str(current_weather["humidity"])
-        humidity += f"/{dhtDevice.humidity}"
 
         sunrise_raw = arrow.get(current_weather["sunrise"]).to(self.timezone)
         sunset_raw = arrow.get(current_weather["sunset"]).to(self.timezone)
