@@ -1,6 +1,6 @@
 {
     "model": "epd_7_in_5_v2_colour",
-    "update_interval": 5,
+    "update_interval": 360,
     "orientation": 180,
     "info_section": false,
     "info_section_height": null,
@@ -30,28 +30,11 @@
         },
         {
             "position": 2,
-            "name": "BusTCL",
-            "config": {
-                "size": [
-                    480,
-                    75
-                ],
-                "padding_x": 0,
-                "padding_y": 0,
-                "fontsize": 18,
-                "language": "fr",
-                "stops": ["AS5561"],
-                "lines": ["C13", "T3", "C16", "25"]
-
-            }
-        },
-        {
-            "position": 3,
             "name": "Calendar",
             "config": {
                 "size": [
                     480,
-                    575
+                    650
                 ],
                 "week_starts_on": "Monday",
                 "show_events": true,
